@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "env": {
+    "BIRDEYE_API_KEY": "@birdeye-api-key",
+    "QUICKNODE_RPC_URL": "@quicknode-rpc-url"
+  }
+}
