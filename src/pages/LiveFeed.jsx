@@ -107,7 +107,13 @@ export default function LiveFeed() {
   const [autoScroll, setAutoScroll] = useState(true)
   const [newIds, setNewIds] = useState(new Set())
   const prevCountRef = useRef(0)
-  const { transactions, volume24h, activeWhales, isLive, isDemo, fetchError } = useWhaleTransactions(hasApiKey)
+  const { transactions, volume24h, activeWhales, isLive, isDemo, fetchError, lastUpdated } = useWhaleTransactions(hasApiKey)
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 1000)
+    return () => clearInterval(id)
+  }, [])
+  const secondsAgo = lastUpdated ? Math.floor((Date.now() - lastUpdated) / 1000) : null
 
   const filtered = useMemo(() => {
     return transactions.filter((tx) => {
@@ -147,6 +153,13 @@ export default function LiveFeed() {
           </p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Last updated indicator (live mode only) */}
+          {isLive && secondsAgo !== null && (
+            <span className="hidden sm:flex items-center gap-1.5 text-[11px] text-whale-text-muted font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-whale-green animate-pulse" />
+              Updated {secondsAgo}s ago
+            </span>
+          )}
           {/* Live / Demo badge */}
           {isLive ? (
             <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-whale-green-dim border border-whale-green/30 text-whale-green text-xs font-semibold">

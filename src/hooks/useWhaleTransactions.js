@@ -58,6 +58,7 @@ export function useWhaleTransactions(hasApiKey = false) {
   const [liveMode, setLiveMode] = useState(false)
   const [fetchError, setFetchError] = useState(null)
   const [totalVolume, setTotalVolume] = useState(0)
+  const [lastUpdated, setLastUpdated] = useState(null)
   const counterRef = useRef(20)
   const mounted = useRef(true)
   const seenIds = useRef(new Set())
@@ -98,6 +99,7 @@ export function useWhaleTransactions(hasApiKey = false) {
       if (trades.length > 0) {
         setLiveMode(true)
         setFetchError(null)
+        setLastUpdated(Date.now())
       }
     } catch (err) {
       if (mounted.current) setFetchError(err.message || 'Network error')
@@ -156,5 +158,6 @@ export function useWhaleTransactions(hasApiKey = false) {
     isLive: liveMode,
     isDemo: !liveMode,
     fetchError,
+    lastUpdated,
   }
 }
