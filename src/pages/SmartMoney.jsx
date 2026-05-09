@@ -38,24 +38,6 @@ const TAG_COLORS = {
 
 function WalletCard({ wallet, onRemove, isKnown }) {
   const toast = useToast()
-  const { hasApiKey } = useApp()
-  const [portfolio, setPortfolio] = useState(null)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (!hasApiKey) { setPortfolio(null); return }
-    let cancelled = false
-    setLoading(true)
-    fetchWalletPortfolio(wallet.address)
-      .then((d) => { if (!cancelled) setPortfolio(d) })
-      .catch(() => { if (!cancelled) setPortfolio(null) })
-      .finally(() => { if (!cancelled) setLoading(false) })
-    return () => { cancelled = true }
-  }, [hasApiKey, wallet.address])
-
-  const totalUSD = portfolio?.totalUsd ?? portfolio?.total_usd ?? null
-  const tokenCount = Array.isArray(portfolio?.items) ? portfolio.items.length
-    : (portfolio?.tokenCount ?? null)
 
   const copyAddress = () => {
     navigator.clipboard.writeText(wallet.address)
@@ -63,7 +45,7 @@ function WalletCard({ wallet, onRemove, isKnown }) {
   }
 
   return (
-    <div className="bg-whale-card border border-whale-border rounded-xl p-4 hover:border-whale-border/80 transition-all duration-150 group">
+    <div className="bg-whale-card border border-whale-border rounded-xl p-4 hover:border-whale-accent/40 transition-all duration-150 group">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-whale-accent/30 to-whale-purple/30 flex items-center justify-center flex-shrink-0">
@@ -86,14 +68,6 @@ function WalletCard({ wallet, onRemove, isKnown }) {
             </span>
           )}
           {isKnown && <Star className="w-3.5 h-3.5 text-whale-yellow fill-whale-yellow" />}
-          <a
-            href={SOLSCAN_ACCOUNT(wallet.address)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-whale-text-muted hover:text-whale-accent transition-colors"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
           {onRemove && (
             <button
               onClick={() => onRemove(wallet.address)}
@@ -104,29 +78,20 @@ function WalletCard({ wallet, onRemove, isKnown }) {
           )}
         </div>
       </div>
-      {/* Portfolio stats */}
-      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-whale-border/50">
-        <div>
-          <p className="text-[10px] text-whale-text-muted uppercase">Portfolio</p>
-          <p className="text-xs font-mono font-semibold text-whale-text mt-0.5">
-            {loading
-              ? <Skeleton className="h-3 w-14" />
-              : totalUSD != null ? formatUSD(totalUSD, true) : '—'}
-          </p>
-        </div>
-        <div>
-          <p className="text-[10px] text-whale-text-muted uppercase">24h P&amp;L</p>
-          <p className="text-xs font-mono font-semibold text-whale-text mt-0.5">—</p>
-        </div>
-        <div>
-          <p className="text-[10px] text-whale-text-muted uppercase">Tokens</p>
-          <p className="text-xs font-mono font-semibold text-whale-text mt-0.5">
-            {loading ? <Skeleton className="h-3 w-8" /> : tokenCount != null ? tokenCount : '—'}
-          </p>
-        </div>
+      {/* Action row */}
+      <div className="flex items-center gap-2 pt-3 border-t border-whale-border/50">
+        <a
+          href={SOLSCAN_ACCOUNT(wallet.address)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-whale-accent hover:bg-whale-accent/10 border border-whale-accent/30 hover:border-whale-accent/60 rounded-lg px-3 py-2 transition-all"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          View Portfolio on Solscan
+        </a>
       </div>
       {!isKnown && wallet.addedAt && (
-        <p className="text-[10px] text-whale-text-muted mt-2">
+        <p className="text-[10px] text-whale-text-muted mt-2 text-center">
           Added {new Date(wallet.addedAt).toLocaleDateString()}
         </p>
       )}
