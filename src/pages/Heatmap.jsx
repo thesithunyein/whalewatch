@@ -50,14 +50,23 @@ const TIMEFRAMES = ['1H', '4H', '24H', '7D']
 const SECTORS = ['All', 'Meme', 'DeFi', 'L1', 'AI', 'LST', 'Oracle', 'Gaming']
 
 function mapLiveToken(t) {
-  const vol = t.v24hUSD ?? 0
+  const vol = Number(t.v24hUSD ?? t.volume24hUSD ?? t.volume24h ?? 0)
   let size = 1
   if (vol >= 1_000_000_000) size = 4
   else if (vol >= 400_000_000) size = 3
   else if (vol >= 80_000_000) size = 2
+  // Birdeye tokenlist uses v24hChangePercent in current API; keep fallbacks for resilience
+  const change = Number(
+    t.v24hChangePercent ??
+    t.priceChange24hPercent ??
+    t.priceChange24h ??
+    t.change24h ??
+    t.priceChangePercent24h ??
+    0
+  )
   return {
     symbol: t.symbol || '???',
-    change: t.priceChange24hPercent ?? 0,
+    change,
     volume: vol,
     size,
     sector: 'Other',

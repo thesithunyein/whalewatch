@@ -26,7 +26,7 @@ const ALLOWED_PATHS = [
 async function getApiKey(): Promise<string | null> {
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SERVICE_ROLE_KEY')!
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
   )
   const { data } = await supabase
     .from('whale_settings')
