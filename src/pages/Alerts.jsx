@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell, BellOff, Plus, Trash2, CheckCircle, XCircle, Clock, ChevronDown } from 'lucide-react'
+import { Bell, BellOff, Plus, Trash2, CheckCircle, XCircle, Clock, ChevronDown, Sparkles, Mail, MessageCircle, Smartphone } from 'lucide-react'
 import clsx from 'clsx'
 import { useApp } from '../context/AppContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
@@ -169,6 +169,43 @@ export default function Alerts() {
           <Plus className="w-4 h-4" />
           New Alert
         </button>
+      </div>
+
+      {/* Beta roadmap banner */}
+      <div className="bg-gradient-to-br from-whale-accent/10 via-whale-purple/10 to-transparent border border-whale-accent/30 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-lg bg-whale-accent/20 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-whale-accent" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm font-semibold text-whale-text">Alert Engine — Public Beta</p>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-whale-accent/20 text-whale-accent border border-whale-accent/30">
+                Beta
+              </span>
+            </div>
+            <p className="text-xs text-whale-text-muted mt-1 leading-relaxed">
+              Configure your alert rules now — we are rolling out delivery channels in waves. Saved alerts will fire automatically when each channel ships.
+            </p>
+            <div className="flex items-center gap-3 mt-3 flex-wrap">
+              <span className="flex items-center gap-1.5 text-[11px] text-whale-text-dim">
+                <Smartphone className="w-3.5 h-3.5 text-whale-green" />
+                <span className="font-medium">In-app toast</span>
+                <span className="text-whale-green">live</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-[11px] text-whale-text-dim">
+                <Mail className="w-3.5 h-3.5 text-whale-text-muted" />
+                <span className="font-medium">Email</span>
+                <span className="text-whale-text-muted">next</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-[11px] text-whale-text-dim">
+                <MessageCircle className="w-3.5 h-3.5 text-whale-text-muted" />
+                <span className="font-medium">Telegram</span>
+                <span className="text-whale-text-muted">soon</span>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Stats */}
